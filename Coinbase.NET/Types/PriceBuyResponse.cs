@@ -1,6 +1,6 @@
 ﻿namespace Coinbase.NET.Types
 {
-    public struct PriceBuyResponse
+    public class PriceBuyResponse
     {
         public PriceUnit Subtotal { get; set; }
         public PriceUnit CoinbaseFee { get; set; }

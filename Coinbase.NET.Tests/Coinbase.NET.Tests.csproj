@@ -50,6 +50,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Account.cs" />
+    <Compile Include="Addresses.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="TestPriceApi.cs" />
     <Compile Include="Initialization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -59,6 +66,13 @@
       <Project>{F4579DEE-CE69-4EDA-B778-29D5BAA4C8CB}</Project>
       <Name>Coinbase.NET</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

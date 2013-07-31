@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using Coinbase.NET.Endpoints;
+using System.Threading.Tasks;
+using Coinbase.NET.Extensions;
 using Coinbase.NET.Types;
 using Newtonsoft.Json.Linq;
 
-namespace Coinbase.NET
+namespace Coinbase.NET.API
 {
-    public static class CoinBaseClient
+    public partial class CoinbaseClient
     {
-        public static SpotRate GetSpotPrice(string currency = null)
+        public async static Task<SpotRate> GetSpotPrice(string currency = null)
         {
-            var url = RestEndpoint.GetSpotRateUrl(currency);
-            var responseJson = new WebClient().DownloadString(url);
-            var spotPriceJObject = JToken.Parse(responseJson);
+            var url = GetSpotRateUrl(currency);
+            var spotPriceJObject = await GetUnauthenticatedJResource(url);
 
             return new SpotRate
             {
@@ -21,15 +21,14 @@ namespace Coinbase.NET
             };
         }
 
-        public static PriceSellResponse GetBitcoinSalePrice(decimal bitcoinQuantity = 1, string currency = null)
+        public async static Task<PriceSellResponse> GetBitcoinSalePrice(decimal bitcoinQuantity = 1, string currency = null)
         {
             if (bitcoinQuantity < 0)
                 throw new ArgumentOutOfRangeException("bitcoinQuantity", "Argument bitCoinQuantity must be a non-negative value.");
 
             // Do not validate currency.
-            var url = RestEndpoint.GetSellPriceUrl(bitcoinQuantity, currency);
-            var responseJson = new WebClient().DownloadString(url);
-            var priceJObject = JToken.Parse(responseJson);
+            var url = GetSellPriceUrl(bitcoinQuantity, currency);
+            var priceJObject = await GetUnauthenticatedJResource(url);
             var fees = priceJObject["fees"].Children().ToArray();
 
             var subtotal = PriceUnit.FromJToken(priceJObject["subtotal"]);
@@ -47,15 +46,14 @@ namespace Coinbase.NET
 
         }
 
-        public static PriceBuyResponse GetBitcoinBuyPrice(decimal bitcoinQuantity = 1, string currency = null)
+        public async static Task<PriceBuyResponse> GetBitcoinBuyPrice(decimal bitcoinQuantity = 1, string currency = null)
         {
             if (bitcoinQuantity < 0)
                 throw new ArgumentOutOfRangeException("bitcoinQuantity", "Argument bitCoinQuantity must be a non-negative value.");
 
             // Do not validate currency.
-            var url = RestEndpoint.GetBuyPricesUrl(bitcoinQuantity, currency);
-            var responseJson = new WebClient().DownloadString(url);
-            var priceJObject = JToken.Parse(responseJson);
+            var url = GetBuyPricesUrl(bitcoinQuantity, currency);
+            var priceJObject = await GetUnauthenticatedJResource(url);
             var fees = priceJObject["fees"].Children().ToArray();
 
             var subtotal = PriceUnit.FromJToken(priceJObject["subtotal"]);
@@ -72,7 +70,30 @@ namespace Coinbase.NET
             };
         }
 
+        public static string GetBuyPricesUrl(decimal quantity, string currency)
+        {
+            return BaseUrl
+                + "prices/buy"
+                + String.Format("/?qty={0}", quantity)
+                .AppendFormatIfNotNull(
+                    "&currency={0}",
+                        WebUtility.UrlEncode(currency));
+        }
 
+        public static string GetSellPriceUrl(decimal quantity, string currency)
+        {
+            return BaseUrl
+                + "prices/sell"
+                + String.Format("/?qty={0}", quantity)
+                .AppendFormatIfNotNull(
+                    "&currency={0}",
+                        WebUtility.UrlEncode(currency));
+        }
 
+        public static string GetSpotRateUrl(string currency)
+        {
+            return BaseUrl
+                + "prices/spot_rate".AppendFormatIfNotNull("/?currency={0}", WebUtility.UrlEncode(currency));
+        }
     }
 }

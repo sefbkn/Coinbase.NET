@@ -50,14 +50,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CoinBaseClientStatic.cs" />
-    <Compile Include="Endpoints\RestEndpoint.cs" />
-    <Compile Include="Authentication\CbAuthMethod.cs" />
+    <Compile Include="API\Account.cs" />
+    <Compile Include="Types\AccountAddressContainer.cs" />
+    <Compile Include="API\Addresses.cs" />
+    <Compile Include="API\Prices.cs" />
+    <Compile Include="Authentication\AuthenticationMode.cs" />
+    <Compile Include="Extensions\String.cs" />
+    <Compile Include="Types\AccountNewReceiveAddress.cs" />
+    <Compile Include="Types\AccountReceiveAddress.cs" />
     <Compile Include="Types\PriceSellResponse.cs" />
     <Compile Include="Types\SpotRate.cs" />
     <Compile Include="Types\PriceUnit.cs" />
     <Compile Include="Types\PriceBuyResponse.cs" />
-    <Compile Include="CoinbaseClient.cs" />
+    <Compile Include="API\CoinbaseClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

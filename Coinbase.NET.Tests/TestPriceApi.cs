@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Coinbase.NET.API;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Coinbase.NET.Tests
@@ -13,7 +11,7 @@ namespace Coinbase.NET.Tests
         [TestMethod]
         public void TestGetSpotRate()
         {
-            var spotRate = CoinBaseClient.GetSpotPrice();
+            var spotRate = CoinbaseClient.GetSpotPrice().Result;
 
             Assert.IsFalse(String.IsNullOrWhiteSpace(spotRate.Price.Currency));
         }
@@ -21,7 +19,7 @@ namespace Coinbase.NET.Tests
         [TestMethod]
         public void TestSellPrice()
         {
-            var prices = CoinBaseClient.GetBitcoinSalePrice();
+            var prices = CoinbaseClient.GetBitcoinSalePrice().Result;
 
             // Assert that currencies are returned from service.
             // We can't go on prices since fees can be waived, negated, etc.
@@ -36,19 +34,30 @@ namespace Coinbase.NET.Tests
         {
             try
             {
-                CoinBaseClient.GetBitcoinSalePrice(-1);
+                CoinbaseClient.GetBitcoinSalePrice(-1).Wait();
                 Assert.Fail("Should not be able to pass negative bitcoin quantity");
             }
-            catch (ArgumentOutOfRangeException exception)
-            {
 
+            catch (Exception exception)
+            {
+                if (exception is ArgumentOutOfRangeException)
+                    return;
+                if (exception is AggregateException)
+                {
+                    var aggregateException = (AggregateException) exception;
+                    if (aggregateException.InnerExceptions != null)
+                        if (aggregateException.InnerExceptions.All(e => e is ArgumentOutOfRangeException))
+                            return;
+                }
+
+                throw;
             }
         }
 
         [TestMethod]
         public void TestGetBuyPrice()
         {
-            var prices = CoinBaseClient.GetBitcoinBuyPrice();
+            var prices = CoinbaseClient.GetBitcoinBuyPrice().Result;
 
             // Assert that currencies are returned from service.
             // We can't go on prices since fees can be waived, negated, etc.
@@ -63,13 +72,24 @@ namespace Coinbase.NET.Tests
         {
             try
             {
-                CoinBaseClient.GetBitcoinBuyPrice(-1);
+                CoinbaseClient.GetBitcoinBuyPrice(-1).Wait();
                 Assert.Fail("Should not be able to pass negative bitcoin quantity");
             }
-            catch (ArgumentOutOfRangeException exception)
+            catch (Exception exception)
             {
-                
+                if (exception is ArgumentOutOfRangeException)
+                    return;
+                if (exception is AggregateException)
+                {
+                    var aggregateException = (AggregateException)exception;
+                    if (aggregateException.InnerExceptions != null)
+                        if (aggregateException.InnerExceptions.All(e => e is ArgumentOutOfRangeException))
+                            return;
+                }
+
+                throw;
             }
+
         }
     }
 }
