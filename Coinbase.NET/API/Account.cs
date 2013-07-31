@@ -31,21 +31,6 @@ namespace Coinbase.NET.API
             return new AccountReceiveAddress(isSuccess, address, callbackUrl);
         }
 
-        /// <summary>
-        /// # Request
-        //POST https://coinbase.com/api/v1/account/generate_receive_address
-        //{
-        //  "api_key": "8722b5759c125ef32edb9e3ce25bac08b57164067f2585739b87eb02d799e5a3",
-        //  "address": {
-        //    "callback_url": "http://www.example.com/callback"
-        //  }
-        //}
-        //# Response
-        //{
-        //  "success": true,
-        //  "address": "muVu2JZo8PbewBHRp6bpqFvVD87qvqEHWA",
-        //  "callback_url": "http://www.example.com/callback"
-        //}
         public async Task<AccountNewReceiveAddress> GetNewReceiveAddress(string callbackUrl = null)
         {
             var url = GetNewReceiveAddressUrl();
