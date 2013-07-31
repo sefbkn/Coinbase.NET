@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security;
 using System.Text;
 
@@ -37,6 +39,17 @@ namespace Coinbase.NET.Authentication
                 .Append(key);
 
             return stringBuilder.ToString();
+        }
+
+        public void AuthorizePostBody(Dictionary<string, object> body, string token)
+        {
+            if(body == null)
+                throw new ArgumentNullException("body");
+
+            if (body.Any(b => String.Equals(b.Key, this.FieldName, StringComparison.CurrentCultureIgnoreCase)))
+                return;
+
+            body.Add(this.FieldName, token);
         }
     }
 }

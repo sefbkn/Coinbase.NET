@@ -40,50 +40,57 @@ namespace Coinbase.NET.API
         /// </summary>
         /// <param name="url">Path to the resource a request is to me made to</param>
         /// <param name="httpMethod">HTTP Method to make request with.  Default is HttpMethod.Get</param>
-        /// <returns></returns>
+        /// <returns>JObject that represents data returned from the request.</returns>
         private async Task<JObject> GetAuthenticatedResource(string url, HttpMethod httpMethod = null, Dictionary<string, object> parameters = null)
         {
+            AssertNotDisposed();
+
+            HttpResponseMessage response = null;
+
+            if(parameters == null)
+                parameters = new Dictionary<string, object>();
+
             if (httpMethod == null)
                 httpMethod = HttpMethod.Get;
 
             if (httpMethod == HttpMethod.Get)
+                response = await GetAuthenticatedGetRequest(url, parameters);
+            else if (httpMethod == HttpMethod.Post)
+                response = await GetAuthenticatedPostRequest(url, parameters);
+            else
+                throw new ArgumentException("Unrecognized value for argument 'httpMethod' supplied.");
+
+            var resultContent = await response
+                .EnsureSuccessStatusCode()
+                .Content
+                .ReadAsStringAsync();
+
+            return JObject.Parse(resultContent);
+        }
+
+        private async Task<HttpResponseMessage> GetAuthenticatedGetRequest(string url, Dictionary<string, object> parameters)
+        {
+            using (var httpClient = new HttpClient())
             {
-                using (var httpClient = new HttpClient())
-                {
-                    var newUrl = this.Method.AuthorizeUrl(url, _authToken);
-                    var newUri = new Uri(newUrl);
+                var newUrl = this.Method.AuthorizeUrl(url, _authToken);
+                var newUri = new Uri(newUrl);
 
-                    var result = await httpClient.GetAsync(newUri);
-                    var resultContent = await result
-                        .EnsureSuccessStatusCode()
-                        .Content
-                        .ReadAsStringAsync();
-
-                    return JObject.Parse(resultContent);
-                }
+                return await httpClient.GetAsync(newUri);
             }
+        }
 
-            if (httpMethod == HttpMethod.Post)
+        private async Task<HttpResponseMessage> GetAuthenticatedPostRequest(string url, Dictionary<string, object> parameters)
+        {
+            using (var client = new HttpClient())
             {
-                using (var client = new HttpClient())
-                {
-                    parameters = parameters ?? new Dictionary<string, object>();
-                    parameters.Add(Method.FieldName, _authToken);
+                parameters = parameters ?? new Dictionary<string, object>();
+                Method.AuthorizePostBody(parameters, _authToken);
 
-                    var json = JsonConvert.SerializeObject(parameters);
-                    var stringContent = new StringContent(json, new UTF8Encoding(), "application/json");
+                var json = JsonConvert.SerializeObject(parameters);
+                var stringContent = new StringContent(json, new UTF8Encoding(), "application/json");
 
-                    var result = await client.PostAsync(url, stringContent);
-                    var resultContent = await result
-                        .EnsureSuccessStatusCode()
-                        .Content
-                        .ReadAsStringAsync();
-
-                    return JObject.Parse(resultContent);
-                }
+                return await client.PostAsync(url, stringContent);
             }
-
-            throw new ArgumentException("Unrecognized value for argument 'httpMethod' supplied.");
         }
 
         private async static Task<JObject> GetUnauthenticatedJResource(string url)
@@ -98,7 +105,7 @@ namespace Coinbase.NET.API
         #region Disposal / Cleanup
         private void AssertNotDisposed()
         {
-            if (_isDisposed) throw new ObjectDisposedException(String.Format("Cannot perform operation on disposed {0} object.", ClassName));
+            if (_isDisposed) throw new ObjectDisposedException(String.Format("Cannot perform operation on disposed object '{0}'.", ClassName));
         }
 
         public void Dispose()
