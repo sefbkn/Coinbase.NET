@@ -1,10 +1,19 @@
-﻿namespace Coinbase.NET.Types
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Coinbase.NET.Types
 {
     public class PriceBuyResponse
     {
-        public PriceUnit Subtotal { get; set; }
-        public PriceUnit CoinbaseFee { get; set; }
-        public PriceUnit BankFee { get; set; }
-        public PriceUnit TotalAmount { get; set; }
+        public PriceUnit Subtotal { get; private set; }
+        public CoinbaseFee[] Fees { get; private set; }
+        public PriceUnit TotalAmount { get; private set; }
+
+        public PriceBuyResponse(PriceUnit subtotal, IEnumerable<CoinbaseFee> fees, PriceUnit totalAmount)
+        {
+            this.Subtotal = subtotal;
+            this.Fees = fees.ToArray();
+            this.TotalAmount = totalAmount;
+        }
     }
 }

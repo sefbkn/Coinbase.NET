@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Security.Policy;
-using System.Text;
 using System.Threading.Tasks;
-using Coinbase.NET.Authentication;
 using Coinbase.NET.Types;
 using Newtonsoft.Json.Linq;
 
@@ -38,7 +35,7 @@ namespace Coinbase.NET.API
 
             if (!String.IsNullOrWhiteSpace(callbackUrl))
             {
-                kvp.Add("address", new Dictionary<string, object>() {
+                kvp.Add("address", new Dictionary<string, object> {
                             {"callback_url", callbackUrl} });
             }
 
@@ -53,8 +50,6 @@ namespace Coinbase.NET.API
 
             return new AccountNewReceiveAddress(isSuccess, address, cbUrl);
         }
-
-
 
         private string GetAccountBalanceUrl()
         {

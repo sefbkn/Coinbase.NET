@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Coinbase.NET.Types
+﻿namespace Coinbase.NET.Types
 {
-    public struct SpotRate
+    public class SpotRate
     {
         public PriceUnit Price { get; set; }
+
+        public SpotRate(PriceUnit price)
+        {
+            this.Price = price;
+        }
     }
 }

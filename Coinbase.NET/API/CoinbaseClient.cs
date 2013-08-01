@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
-using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using Coinbase.NET.Authentication;
@@ -17,7 +15,7 @@ namespace Coinbase.NET.API
 
         private const string ClassName = "CoinbaseClient";
         private bool _isDisposed;
-        private readonly AuthenticationMode Method;
+        private readonly AuthenticationMode _method;
         private readonly string _authToken;
 
         public CoinbaseClient(string token, AuthenticationMode method)
@@ -31,7 +29,7 @@ namespace Coinbase.NET.API
                 throw new ArgumentNullException("method", "Authentication method must be specified.");
 
             _authToken = token;
-            Method = method;
+            _method = method;
         }
 
         /// <summary>
@@ -40,12 +38,13 @@ namespace Coinbase.NET.API
         /// </summary>
         /// <param name="url">Path to the resource a request is to me made to</param>
         /// <param name="httpMethod">HTTP Method to make request with.  Default is HttpMethod.Get</param>
+        /// <param name="parameters"></param>
         /// <returns>JObject that represents data returned from the request.</returns>
         private async Task<JObject> GetAuthenticatedResource(string url, HttpMethod httpMethod = null, Dictionary<string, object> parameters = null)
         {
             AssertNotDisposed();
 
-            HttpResponseMessage response = null;
+            HttpResponseMessage response;
 
             if(parameters == null)
                 parameters = new Dictionary<string, object>();
@@ -54,7 +53,7 @@ namespace Coinbase.NET.API
                 httpMethod = HttpMethod.Get;
 
             if (httpMethod == HttpMethod.Get)
-                response = await GetAuthenticatedGetRequest(url, parameters);
+                response = await GetAuthenticatedGetRequest(url);
             else if (httpMethod == HttpMethod.Post)
                 response = await GetAuthenticatedPostRequest(url, parameters);
             else
@@ -68,11 +67,11 @@ namespace Coinbase.NET.API
             return JObject.Parse(resultContent);
         }
 
-        private async Task<HttpResponseMessage> GetAuthenticatedGetRequest(string url, Dictionary<string, object> parameters)
+        private async Task<HttpResponseMessage> GetAuthenticatedGetRequest(string url)
         {
             using (var httpClient = new HttpClient())
             {
-                var newUrl = this.Method.AuthorizeUrl(url, _authToken);
+                var newUrl = _method.AuthorizeUrl(url, _authToken);
                 var newUri = new Uri(newUrl);
 
                 return await httpClient.GetAsync(newUri);
@@ -84,7 +83,7 @@ namespace Coinbase.NET.API
             using (var client = new HttpClient())
             {
                 parameters = parameters ?? new Dictionary<string, object>();
-                Method.AuthorizePostBody(parameters, _authToken);
+                _method.AuthorizePostBody(parameters, _authToken);
 
                 var json = JsonConvert.SerializeObject(parameters);
                 var stringContent = new StringContent(json, new UTF8Encoding(), "application/json");

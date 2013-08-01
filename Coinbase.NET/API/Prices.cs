@@ -15,10 +15,7 @@ namespace Coinbase.NET.API
             var url = GetSpotRateUrl(currency);
             var spotPriceJObject = await GetUnauthenticatedJResource(url);
 
-            return new SpotRate
-            {
-                Price = PriceUnit.FromJToken(spotPriceJObject)
-            };
+            return new SpotRate(PriceUnit.FromJToken(spotPriceJObject));
         }
 
         public async static Task<PriceSellResponse> GetBitcoinSalePrice(decimal bitcoinQuantity = 1, string currency = null)
@@ -29,45 +26,39 @@ namespace Coinbase.NET.API
             // Do not validate currency.
             var url = GetSellPriceUrl(bitcoinQuantity, currency);
             var priceJObject = await GetUnauthenticatedJResource(url);
-            var fees = priceJObject["fees"].Children().ToArray();
 
             var subtotal = PriceUnit.FromJToken(priceJObject["subtotal"]);
-            var coinbaseFee = PriceUnit.FromJToken(fees[0]["coinbase"]);
-            var bankFee = PriceUnit.FromJToken(fees[1]["bank"]);
+            var fees = priceJObject["fees"]
+                .SelectMany(t => t)
+                .Cast<JProperty>()
+                .Select(jProperty => new CoinbaseFee(jProperty.Name,
+                    PriceUnit.FromJToken(jProperty.Value)
+                ));
+
             var total = PriceUnit.FromJToken(priceJObject["total"]);
 
-            return new PriceSellResponse
-            {
-                Subtotal = subtotal,
-                CoinbaseFee = coinbaseFee,
-                BankFee = bankFee,
-                TotalAmount = total
-            };
-
+            return new PriceSellResponse(subtotal, fees, total);
         }
 
         public async static Task<PriceBuyResponse> GetBitcoinBuyPrice(decimal bitcoinQuantity = 1, string currency = null)
         {
             if (bitcoinQuantity < 0)
-                throw new ArgumentOutOfRangeException("bitcoinQuantity", "Argument bitCoinQuantity must be a non-negative value.");
+                throw new ArgumentOutOfRangeException("bitcoinQuantity", "Argument bitcoinQuantity must be a non-negative value.");
 
             // Do not validate currency.
             var url = GetBuyPricesUrl(bitcoinQuantity, currency);
             var priceJObject = await GetUnauthenticatedJResource(url);
-            var fees = priceJObject["fees"].Children().ToArray();
 
             var subtotal = PriceUnit.FromJToken(priceJObject["subtotal"]);
-            var coinbaseFee = PriceUnit.FromJToken(fees[0]["coinbase"]);
-            var bankFee = PriceUnit.FromJToken(fees[1]["bank"]);
+            var fees = priceJObject["fees"]
+                .SelectMany(t => t)
+                .Cast<JProperty>()
+                .Select(jProperty => new CoinbaseFee(jProperty.Name,
+                    PriceUnit.FromJToken(jProperty.Value)
+                ));
             var total = PriceUnit.FromJToken(priceJObject["total"]);
 
-            return new PriceBuyResponse
-            {
-                Subtotal = subtotal,
-                CoinbaseFee = coinbaseFee,
-                BankFee = bankFee,
-                TotalAmount = total
-            };
+            return new PriceBuyResponse(subtotal, fees, total);
         }
 
         public static string GetBuyPricesUrl(decimal quantity, string currency)

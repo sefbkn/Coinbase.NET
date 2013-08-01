@@ -23,8 +23,7 @@ namespace Coinbase.NET.Tests
 
             // Assert that currencies are returned from service.
             // We can't go on prices since fees can be waived, negated, etc.
-            Assert.IsFalse(String.IsNullOrWhiteSpace(prices.BankFee.Currency));
-            Assert.IsFalse(String.IsNullOrWhiteSpace(prices.CoinbaseFee.Currency));
+            Assert.IsTrue(prices.Fees.Any());
             Assert.IsFalse(String.IsNullOrWhiteSpace(prices.Subtotal.Currency));
             Assert.IsFalse(String.IsNullOrWhiteSpace(prices.TotalAmount.Currency));
         }
@@ -42,9 +41,9 @@ namespace Coinbase.NET.Tests
             {
                 if (exception is ArgumentOutOfRangeException)
                     return;
-                if (exception is AggregateException)
+                var aggregateException = exception as AggregateException;
+                if (aggregateException != null)
                 {
-                    var aggregateException = (AggregateException) exception;
                     if (aggregateException.InnerExceptions != null)
                         if (aggregateException.InnerExceptions.All(e => e is ArgumentOutOfRangeException))
                             return;
@@ -60,9 +59,8 @@ namespace Coinbase.NET.Tests
             var prices = CoinbaseClient.GetBitcoinBuyPrice().Result;
 
             // Assert that currencies are returned from service.
-            // We can't go on prices since fees can be waived, negated, etc.
-            Assert.IsFalse(String.IsNullOrWhiteSpace(prices.BankFee.Currency));
-            Assert.IsFalse(String.IsNullOrWhiteSpace(prices.CoinbaseFee.Currency));
+            // We can't go on price values since fees can be waived, negated, etc.
+            Assert.IsTrue(prices.Fees.Any());
             Assert.IsFalse(String.IsNullOrWhiteSpace(prices.Subtotal.Currency));
             Assert.IsFalse(String.IsNullOrWhiteSpace(prices.TotalAmount.Currency));
         }

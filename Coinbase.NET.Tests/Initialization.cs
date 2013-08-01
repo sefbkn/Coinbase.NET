@@ -13,10 +13,10 @@ namespace Coinbase.NET.Tests
         {
             try
             {
-                var coinbaseClient = new CoinbaseClient(null, AuthenticationMode.ApiKey);
+                new CoinbaseClient(null, AuthenticationMode.ApiKey);
             }
 
-            catch (ArgumentException exception)
+            catch (ArgumentException)
             {
                 return;
             }
@@ -48,7 +48,7 @@ namespace Coinbase.NET.Tests
                 coinbaseClient.Dispose();
             }
 
-            catch (ObjectDisposedException exception)
+            catch (ObjectDisposedException)
             {
                 return;
             }
