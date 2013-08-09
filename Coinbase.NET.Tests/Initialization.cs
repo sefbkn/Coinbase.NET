@@ -1,9 +1,9 @@
 ﻿using System;
-using Coinbase.NET.API;
-using Coinbase.NET.Authentication;
+using Coinbase.Net.Api;
+using Coinbase.Net.Authentication;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Coinbase.NET.Tests
+namespace Coinbase.Net.Tests
 {
     [TestClass]
     public class Initialization
@@ -13,7 +13,7 @@ namespace Coinbase.NET.Tests
         {
             try
             {
-                new CoinbaseClient(null, AuthenticationMode.ApiKey);
+                new CoinbaseClient(null, new ApiKeyAuthenticator());
             }
 
             catch (ArgumentException)
@@ -27,20 +27,20 @@ namespace Coinbase.NET.Tests
         [TestMethod]
         public void CreateClientWithApiKey()
         {
-            var coinbaseClient = new CoinbaseClient("APIKEY", AuthenticationMode.ApiKey);
+            var coinbaseClient = new CoinbaseClient("APIKEY", new ApiKeyAuthenticator());
         }
 
         [TestMethod]
         public void DisposeClientOnce()
         {
-            var coinbaseClient = new CoinbaseClient("APIKEY", AuthenticationMode.ApiKey);
+            var coinbaseClient = new CoinbaseClient("APIKEY", new ApiKeyAuthenticator());
             coinbaseClient.Dispose();
         }
 
         [TestMethod]
         public void DisposeClientTwice()
         {
-            var coinbaseClient = new CoinbaseClient("APIKEY", AuthenticationMode.ApiKey);
+            var coinbaseClient = new CoinbaseClient("APIKEY", new ApiKeyAuthenticator());
             coinbaseClient.Dispose();
 
             try

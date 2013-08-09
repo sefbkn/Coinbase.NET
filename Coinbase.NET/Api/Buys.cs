@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Coinbase.NET.Types;
-using Newtonsoft.Json.Linq;
+using Coinbase.Net.Types;
 
-namespace Coinbase.NET.API
+namespace Coinbase.Net.Api
 {
     public partial class CoinbaseClient
     {
@@ -18,7 +15,7 @@ namespace Coinbase.NET.API
         public async Task<ExchangeBitcoinResponse> PurchaseBitcoin(decimal bitcoinQuantity)
         {
             var url = GetBuyUrl();
-            var jObject = await GetAuthenticatedResource(url, HttpMethod.Post, new Dictionary<string, object>{{"qty", bitcoinQuantity}});
+            var jObject = await GetAuthenticatedResource(url, HttpMethod.Post, new Dictionary<string, object> { { "qty", bitcoinQuantity } });
             return ExchangeBitcoinResponse.FromJObject(jObject);
         }
 

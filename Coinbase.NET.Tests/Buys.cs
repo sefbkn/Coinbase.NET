@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Coinbase.NET.API;
-using Coinbase.NET.Authentication;
-using Coinbase.NET.Tests.Properties;
+using Coinbase.Net.Api;
+using Coinbase.Net.Authentication;
+using Coinbase.Net.Tests.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Coinbase.NET.Tests
+namespace Coinbase.Net.Tests
 {
     [TestClass]
     public class ExchangeCurrencyToFromBitcoin
@@ -18,7 +18,7 @@ namespace Coinbase.NET.Tests
         {
             var quantity = 0.0m;
 
-            var coinbaseClient = new CoinbaseClient(Settings.Default.ApiKey, AuthenticationMode.ApiKey);
+            var coinbaseClient = new CoinbaseClient(Settings.Default.ApiKey, new ApiKeyAuthenticator());
             var response = coinbaseClient.SellBitcoin(quantity).Result;
 
             Assert.IsTrue(response.Errors.Any());
@@ -31,7 +31,7 @@ namespace Coinbase.NET.Tests
             // response back from the request.
             var quantity = 0.0m;
 
-            var coinbaseClient = new CoinbaseClient(Settings.Default.ApiKey, AuthenticationMode.ApiKey);
+            var coinbaseClient = new CoinbaseClient(Settings.Default.ApiKey, new ApiKeyAuthenticator());
             var response = coinbaseClient.PurchaseBitcoin(quantity).Result;
 
             Assert.IsTrue(response.Errors.Any());

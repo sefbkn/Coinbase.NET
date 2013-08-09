@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Coinbase.NET.Types
+namespace Coinbase.Net.Types
 {
     public class PriceBuyResponse
     {

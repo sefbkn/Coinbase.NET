@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Coinbase.NET.Extensions;
-using Coinbase.NET.Types;
+using Coinbase.Net.Extensions;
+using Coinbase.Net.Types;
 using Newtonsoft.Json.Linq;
 
-namespace Coinbase.NET.API
+namespace Coinbase.Net.Api
 {
     public partial class CoinbaseClient
     {

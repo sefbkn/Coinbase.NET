@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security;
 
-namespace Coinbase.NET.Extensions
+namespace Coinbase.Net.Extensions
 {
     internal static class SecureStringHelper
     {

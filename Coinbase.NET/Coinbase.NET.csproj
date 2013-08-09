@@ -7,7 +7,7 @@
     <ProjectGuid>{F4579DEE-CE69-4EDA-B778-29D5BAA4C8CB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Coinbase.NET</RootNamespace>
+    <RootNamespace>Coinbase.Net</RootNamespace>
     <AssemblyName>Coinbase.NET</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -53,6 +53,7 @@
     <Compile Include="Api\Account.cs" />
     <Compile Include="Api\Buys.cs" />
     <Compile Include="Api\Sells.cs" />
+    <Compile Include="Authentication\ICoinbaseAuthenticator.cs" />
     <Compile Include="Types\AccountAddress.cs" />
     <Compile Include="Types\AccountAddressContainer.cs" />
     <Compile Include="Api\Addresses.cs" />

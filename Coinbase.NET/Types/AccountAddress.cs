@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Coinbase.NET.Types
+namespace Coinbase.Net.Types
 {
     public class AccountAddress
     {

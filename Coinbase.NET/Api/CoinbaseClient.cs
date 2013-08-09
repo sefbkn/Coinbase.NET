@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Coinbase.NET.Authentication;
+using Coinbase.Net.Authentication;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Coinbase.NET.API
+namespace Coinbase.Net.Api
 {
     public partial class CoinbaseClient : IDisposable
     {
@@ -15,10 +15,10 @@ namespace Coinbase.NET.API
 
         private const string ClassName = "CoinbaseClient";
         private bool _isDisposed;
-        private readonly AuthenticationMode _method;
+        private readonly ApiKeyAuthenticator _method;
         private readonly string _authToken;
 
-        public CoinbaseClient(string token, AuthenticationMode method)
+        public CoinbaseClient(string token, ApiKeyAuthenticator method)
         {
             _isDisposed = false;
 
@@ -53,9 +53,9 @@ namespace Coinbase.NET.API
                 httpMethod = HttpMethod.Get;
 
             if (httpMethod == HttpMethod.Get)
-                response = await GetAuthenticatedGetRequest(url);
+                response = await GetAuthenticatedGetResponse(url);
             else if (httpMethod == HttpMethod.Post)
-                response = await GetAuthenticatedPostRequest(url, parameters);
+                response = await GetAuthenticatedPostResponse(url, parameters);
             else
                 throw new ArgumentException("Unrecognized value for argument 'httpMethod' supplied.");
 
@@ -67,23 +67,28 @@ namespace Coinbase.NET.API
             return JObject.Parse(resultContent);
         }
 
-        private async Task<HttpResponseMessage> GetAuthenticatedGetRequest(string url)
+        private async Task<HttpResponseMessage> GetAuthenticatedGetResponse(string url)
         {
+            AssertNotDisposed();
+
             using (var httpClient = new HttpClient())
             {
-                var newUrl = _method.AuthorizeUrl(url, _authToken);
+                var newUrl = _method.Authorize(url, _authToken);
                 var newUri = new Uri(newUrl);
-
+                
                 return await httpClient.GetAsync(newUri);
             }
         }
 
-        private async Task<HttpResponseMessage> GetAuthenticatedPostRequest(string url, Dictionary<string, object> parameters)
+        private async Task<HttpResponseMessage> GetAuthenticatedPostResponse(string url, Dictionary<string, object> parameters)
         {
+            AssertNotDisposed();
+
             using (var client = new HttpClient())
             {
-                parameters = parameters ?? new Dictionary<string, object>();
-                _method.AuthorizePostBody(parameters, _authToken);
+                parameters = _method.Authorize(
+                    parameters ?? new Dictionary<string, object>(), 
+                    _authToken);
 
                 var json = JsonConvert.SerializeObject(parameters);
                 var stringContent = new StringContent(json, new UTF8Encoding(), "application/json");

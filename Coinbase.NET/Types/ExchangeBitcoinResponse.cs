@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 
-namespace Coinbase.NET.Types
+namespace Coinbase.Net.Types
 {
     /// <summary>
     /// Response type that is returned when a bitcoin is

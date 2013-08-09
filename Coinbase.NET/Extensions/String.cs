@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Coinbase.NET.Extensions
+namespace Coinbase.Net.Extensions
 {
     internal static class StringExtensions
     {

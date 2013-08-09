@@ -4,9 +4,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Coinbase.NET.Types;
+using Coinbase.Net.Types;
 
-namespace Coinbase.NET.API
+namespace Coinbase.Net.Api
 {
     public partial class CoinbaseClient
     {

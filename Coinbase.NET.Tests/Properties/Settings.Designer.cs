@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Coinbase.NET.Tests.Properties {
+namespace Coinbase.Net.Tests.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

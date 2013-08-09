@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Coinbase.NET.Types
+namespace Coinbase.Net.Types
 {
     public class AccountAddressContainer
     {

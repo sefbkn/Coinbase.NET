@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Coinbase.NET.API;
+using Coinbase.Net.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Coinbase.NET.Tests
+namespace Coinbase.Net.Tests
 {
     [TestClass]
     public class TestPriceApi
@@ -77,13 +77,12 @@ namespace Coinbase.NET.Tests
             {
                 if (exception is ArgumentOutOfRangeException)
                     return;
-                if (exception is AggregateException)
-                {
-                    var aggregateException = (AggregateException)exception;
+
+                var aggregateException = exception as AggregateException;
+                if (aggregateException != null)
                     if (aggregateException.InnerExceptions != null)
                         if (aggregateException.InnerExceptions.All(e => e is ArgumentOutOfRangeException))
                             return;
-                }
 
                 throw;
             }

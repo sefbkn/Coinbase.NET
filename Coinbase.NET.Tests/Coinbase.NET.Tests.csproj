@@ -6,7 +6,7 @@
     <ProjectGuid>{A5F39BD9-3EBA-4C22-B2FF-A2D9949A31B4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Coinbase.NET.Tests</RootNamespace>
+    <RootNamespace>Coinbase.Net.Tests</RootNamespace>
     <AssemblyName>Coinbase.NET.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

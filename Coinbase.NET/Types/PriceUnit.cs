@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json.Linq;
 
-namespace Coinbase.NET.Types
+namespace Coinbase.Net.Types
 {
     public struct PriceUnit
     {

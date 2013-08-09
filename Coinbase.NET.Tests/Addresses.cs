@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Coinbase.NET.API;
-using Coinbase.NET.Authentication;
-using Coinbase.NET.Tests.Properties;
+using Coinbase.Net.Api;
+using Coinbase.Net.Authentication;
+using Coinbase.Net.Tests.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Coinbase.NET.Tests
+namespace Coinbase.Net.Tests
 {
     [TestClass]
     public class Addresses
@@ -16,7 +16,7 @@ namespace Coinbase.NET.Tests
         [TestMethod]
         public void GetAddressesAssociatedWithAccount()
         {
-            var client = new CoinbaseClient(Settings.Default.ApiKey, AuthenticationMode.ApiKey);
+            var client = new CoinbaseClient(Settings.Default.ApiKey, new ApiKeyAuthenticator());
             var accountAddresses = client.GetAccountAddresses().Result;
 
             Assert.IsNotNull(accountAddresses);

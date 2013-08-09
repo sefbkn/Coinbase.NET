@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Coinbase.NET.Types
+namespace Coinbase.Net.Types
 {
     public class AccountNewReceiveAddress
     {
