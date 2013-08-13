@@ -53,7 +53,7 @@
     <Compile Include="Api\Account.cs" />
     <Compile Include="Api\Buys.cs" />
     <Compile Include="Api\Sells.cs" />
-    <Compile Include="Authentication\ICoinbaseAuthenticator.cs" />
+    <Compile Include="Authentication\AuthenticatorBase.cs" />
     <Compile Include="Types\AccountAddress.cs" />
     <Compile Include="Types\AccountAddressContainer.cs" />
     <Compile Include="Api\Addresses.cs" />
