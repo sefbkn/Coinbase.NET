@@ -1,3 +1,6 @@
+~~~~~~ 1JhFNdHBKnFfSwDiiXxbEocLVz3iVopX2D ~~~~~~~
+
+
 Coinbase API for .NET
 
 This library is currently in alpha stage.
